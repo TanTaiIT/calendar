@@ -1,29 +1,51 @@
-<script setup>
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useAuth } from '@/stores/useAuth'
+import { useRouter } from 'vue-router';
+import { useBase } from '@/composable/useBase';
+export default defineComponent({
+  setup() {
+    //State
+    const userId = ref('')
+    const password = ref('')
+    const { login } = useAuth()
+    const router = useRouter()
+    const { showAlert } = useBase()
+    const onSubmit = async (e: Event): Promise<void> => {
+      e.preventDefault()
+      try {
+        const payload = {
+          userId: userId.value,
+          password: password.value,
+          solutionId: 3002
+        }
+        const response = await login(payload)
 
-//State
-const userId = ref('')
-const password = ref('')
-const { login } = useAuth()
+        if(response.data.isOK) {
+          router.push({name: 'home'})
+          return
+        }
 
-const onSumit = async (e) => {
-  e.preventDefault()
-  try {
-    const payload = {
-      userId: userId.value,
-      password: password.value
+        // showAlert(response.data.errorMessages[0].errorMessage)
+      } catch (error: any) {
+        // showAlert(error.message || '')
+        console.log('error', error)
+      }
     }
-    await login(payload)
-  } catch (error) {
-    console.log('error')
+
+    return {
+      onSubmit,
+      userId,
+      password
+    }
   }
-}
+})
+
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-center">
-    <form class="w-50 h-full flex flex-col gap-5" @submit="onSumit">
+    <form  @submit="onSubmit" class="h-full w-[40%] flex flex-col gap-10">
       <div>
         <h1 class="uppercase font-bold">Login</h1>
       </div>
@@ -40,7 +62,7 @@ const onSumit = async (e) => {
       </div>
 
       <div class="w-full text-center">
-        <b-button variant="primary" type="submit">Submit</b-button>
+        <b-button variant="primary" type="submit" @click="onSubmit">Submit</b-button>
       </div>
     </form>
   </div>

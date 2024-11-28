@@ -14,7 +14,7 @@ const createHttp = ({type = ''}) => {
   const http = axios.create({
     headers: DEFAULT_HEADER,
     timeout: 10000,
-    baseURL: `${import.meta.env.BASE_URL}/api/${type}/v1`
+    baseURL: `${import.meta.env.VITE_API_ENDPOINT}/api/${type}/v1`
   })
 
   return http

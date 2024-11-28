@@ -12,6 +12,13 @@ export const useAuth = defineStore('auth', () => {
   const accessToken = ref<string>('')
 
   // Actions
+  const setRefreshTokenLocal = (refreshToken: string): void => {
+    localStorage.setItem('refreshToken', refreshToken)
+  }
+
+  const setAccessTokenLocal = (accessToken: string): void => {
+    localStorage.setItem('accessToken', accessToken)
+  }
   const login = async(query: userLoginPayload) => {
     try {
       const payload = {
@@ -21,6 +28,16 @@ export const useAuth = defineStore('auth', () => {
       }
       const response = await Login(culture, payload)
       console.log('response', response)
+      if(response.data.isOK) {
+        userInfo.value = response.data.result.userAuthInfo
+        shopInfo.value = response.data.result.shopBasicInfo
+      }
+      
+      setRefreshTokenLocal(userInfo?.value?.refreshToken || '')
+      setAccessTokenLocal(userInfo?.value?.authToken || '')
+
+      return response
+
     } catch (error) {
       throw error
     }

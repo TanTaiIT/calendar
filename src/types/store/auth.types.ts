@@ -7,7 +7,9 @@ export interface userInfoType {
   solutionId: number,
   useAccountId: number,
   userID: string,
-  userRoleCode: string
+  userRoleCode: string,
+  refreshToken: string,
+  authToken: string
 }
 
 export interface chaniInfoType {
