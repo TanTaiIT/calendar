@@ -3,7 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'main-gray': '#d9d9d9'
+        'main-gray': '#d9d9d9',
+        'calendar-head': '#254554',
+        'gray-light': '#dee2e6'
       }
     },
   },
